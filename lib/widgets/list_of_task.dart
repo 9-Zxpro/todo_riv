@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_riv/data/data.dart';
-import 'package:todo_riv/utils/extensions.dart';
-
-import 'common_container.dart';
+import 'package:todo_riv/utils/utils.dart';
+import 'package:todo_riv/widgets/widgets.dart';
 
 class ListOfTask extends StatelessWidget {
   const ListOfTask(
@@ -28,11 +27,36 @@ class ListOfTask extends StatelessWidget {
                 style: context.textTheme.headlineSmall,
               ),
             )
-          : ListView.builder(
+          : ListView.separated(
               shrinkWrap: true,
-              itemCount: 8,
+              itemCount: tasks.length,
               padding: EdgeInsets.zero,
-              itemBuilder: ((context, index) => Text('Home'))),
+              itemBuilder: (context, index) {
+                final task = tasks[index];
+
+                return InkWell(
+                  onLongPress: () {
+                    // toDo delete task
+                  },
+                  onTap: () async {
+                    // todo show task details
+                    await showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return TaskDetails(task: task);
+                        });
+                  },
+                  child: TaskTitle(
+                    task: task,
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(
+                  thickness: 1.5,
+                );
+              },
+            ),
     );
   }
 }
